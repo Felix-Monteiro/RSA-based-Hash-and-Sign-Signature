@@ -58,13 +58,25 @@ def rabin_miller_primality_test(mrc):
     return True
 
 
-def prime_generator():
-    while True:
-        n = 8  # bit size
-        p = coprime_checker(n)
-        q = coprime_checker(n)
-        if not rabin_miller_primality_test(p) and rabin_miller_primality_test(q):
-            continue
-        else:
-            return p*q
+def blum_integer_test(x):
+    if x % 4 == 3:
+        print(" Is a Blum Integer")
+        return True
+    else:
+        return False
 
+
+def prime_generator():
+    n = 8  # bit size
+
+    p = coprime_checker(n)
+    q = coprime_checker(n)
+
+    # blum integer test and rabin miller
+    while (p % 4) != 3 or rabin_miller_primality_test(p) != True:
+        p = coprime_checker(n)
+
+    while (q % 4) != 3 or rabin_miller_primality_test(q) != True:
+        q = coprime_checker(n)
+
+    return p*q

@@ -1,10 +1,8 @@
 from Setup import PrimeNumberGenerator
-from Setup import BlumWilliamsTest
 from Setup import QuadraticResidues
 
 def setup():
     primes = PrimeNumberGenerator
-    blum = BlumWilliamsTest
     qr = QuadraticResidues
 
     while True:
@@ -13,18 +11,14 @@ def setup():
         n = primes.prime_generator()
         print("N = " + str(n))
 
-        # blum number check
-        if blum.blum_integer_test(n):
-            print(str(n) + " Is a Blum Integer")
-            # calculate the 2 random Quadratic residue
-            lqr = qr.get_random_qr(qr.legendre_symbol(n))
+        # calculate the 2 random Quadratic residue
+        lqr = qr.get_random_qr(qr.legendre_symbol(n))
 
-            qr1 = int(lqr[0])  # First QR
-            qr2 = int(lqr[1])  # Second QR
+        u = int(lqr[0])  # First QR
+        h = int(lqr[1])  # Second QR
 
-            return False
-        else:
-            print("ERROR: Not a Blum Integer")
+        return False
+
 
 
 # def sign(sk, s, m):
