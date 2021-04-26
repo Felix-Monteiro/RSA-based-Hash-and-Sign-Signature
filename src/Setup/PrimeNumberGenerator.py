@@ -60,7 +60,7 @@ def rabin_miller_primality_test(mrc):
 
 def prime_generator():
     while True:
-        n = 10  # bit size
+        n = 8  # bit size
         p = coprime_checker(n)
         q = coprime_checker(n)
         if not rabin_miller_primality_test(p) and rabin_miller_primality_test(q):
