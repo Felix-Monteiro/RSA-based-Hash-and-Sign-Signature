@@ -11,11 +11,10 @@ def setup():
         n = primes.prime_generator()
         print("N = " + str(n))
 
-        # calculate the 2 random Quadratic residue
+        # calculate the 2 random different Quadratic residue
         lqr = qr.get_random_qr(qr.legendre_symbol(n))
-
-        u = int(lqr[0])  # First QR
-        h = int(lqr[1])  # Second QR
+        u = lqr[0]  # First QR
+        h = lqr[1]  # Second QR
 
         return False
 
