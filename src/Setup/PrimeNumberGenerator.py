@@ -32,8 +32,8 @@ def coprime_checker(n):
             return pc
 
 
-def rabin_miller_primality_test(mrc):
-    """Run 20 iterations of Rabin Miller Primality test"""
+def miller_rabin_primality_test(mrc):
+
     max_divisions_by_two = 0
     ec = mrc - 1
     while ec % 2 == 0:
@@ -51,6 +51,8 @@ def rabin_miller_primality_test(mrc):
 
     # Set number of trials here
     number_of_rabin_trials = 20
+
+    # nr of iterations of Rabin Miller Primality test
     for i in range(number_of_rabin_trials):
         round_tester = random.randrange(2, mrc)
         if trial_composite(round_tester):
@@ -58,16 +60,26 @@ def rabin_miller_primality_test(mrc):
     return True
 
 def prime_generator():
-    n = 8  # bit size
+    bit_size = 8  # bit size
 
-    p = coprime_checker(n)
-    q = coprime_checker(n)
+    p = coprime_checker(bit_size)
+    q = coprime_checker(bit_size)
 
     # blum integer test and rabin miller
-    while (p % 4) != 3 or rabin_miller_primality_test(p) != True:
-        p = coprime_checker(n)
+    while (p % 4) != 3 or miller_rabin_primality_test(p) != True:
+        p = coprime_checker(bit_size)
 
-    while (q % 4) != 3 or rabin_miller_primality_test(q) != True or q == p:
-        q = coprime_checker(n)
+    while (q % 4) != 3 or miller_rabin_primality_test(q) != True or q == p:
+        q = coprime_checker(bit_size)
 
+    # security parameter bit_size
+    l = 128
+    phi_n = (p-1)*(q-1)
+    if 2 ** l < phi_n < 2 ** (l+2):
+        print("Parameter bit_size = " + bit_size + "and it is secure")
+    else:
+        print("Parameter bit_size Insecure!")
+
+    print("Secure Prime p = " + str(p))
+    print("Secure Prime q = " + str(q) + "\n")
     return p*q
