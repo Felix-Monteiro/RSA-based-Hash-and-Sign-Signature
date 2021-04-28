@@ -18,7 +18,7 @@ def random_prime_candidate(n):
 
 
 def coprime_checker(n):
-    """Generate a prime candidate divisible by first primes"""
+    """ Generate a prime candidate divisible by first primes list"""
     while True:
         # Obtain a random number
         pc = random_prime_candidate(n)
@@ -33,7 +33,6 @@ def coprime_checker(n):
 
 
 def miller_rabin_primality_test(mrc):
-
     max_divisions_by_two = 0
     ec = mrc - 1
     while ec % 2 == 0:
@@ -59,27 +58,24 @@ def miller_rabin_primality_test(mrc):
             return False
     return True
 
-def prime_generator():
-    bit_size = 8  # bit size
 
-    p = coprime_checker(bit_size)
-    q = coprime_checker(bit_size)
+def prime_generator(l):
+    p = coprime_checker(l)
+    q = coprime_checker(l)
 
     # blum integer test and rabin miller
     while (p % 4) != 3 or miller_rabin_primality_test(p) != True:
-        p = coprime_checker(bit_size)
+        p = coprime_checker(l)
 
     while (q % 4) != 3 or miller_rabin_primality_test(q) != True or q == p:
-        q = coprime_checker(bit_size)
+        q = coprime_checker(l)
 
-    # security parameter bit_size
-    l = 128
-    phi_n = (p-1)*(q-1)
-    if 2 ** l < phi_n < 2 ** (l+2):
-        print("Parameter bit_size = " + bit_size + "and it is secure")
+    phi_n = (p - 1) * (q - 1)
+    if 2 ** l < phi_n < 2 ** (l + 2):
+        print("Security Parameter l = " + str(l) + " and it is secure")
     else:
-        print("Parameter bit_size Insecure!")
+        print("Security Parameter l = " + str(l) + " and it is insecure")
 
     print("Secure Prime p = " + str(p))
     print("Secure Prime q = " + str(q) + "\n")
-    return p*q
+    return p * q

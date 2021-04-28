@@ -19,7 +19,7 @@ def jacobi_legendre_qr(n):
         else:
             a += 1
 
-    print("The Modulus N = " + str(n) + " has: " + str(qr_list) + " Quadratic Residues in [1,N-1]")
+    print("The Modulus N = " + str(n) + " has: " + str(len(qr_list)) + " Quadratic Residues in [1,N-1]")
     return qr_list
 
 
