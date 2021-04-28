@@ -2,36 +2,29 @@ import random
 import math
 
 '''Random e'''
-def generate_random(l):
-    r = ""
-    encoding = 'utf8'
-    # Iterate over the range [0, l - 1]
-    for i in range(l):
-        # Generate the random number
-        num = random.randint(0, 1)
 
-        r += str(num)
-
-    r = bytes(r, encoding)
-    return r
-
-
-def check_relatively_primes(l, r, p, q):
-    encoding = 'utf8'
-    e = int.from_bytes(r, "big")
+def random_e(l, p, q):
+    """security parameter l'' = l^2"""
+    e = random.randint(0, l**2)
     phi_n = (p - 1) * (q - 1)
 
+    # check_relatively_primes_to_e
     while math.gcd(e, phi_n) != 1:
-        ep = generate_random(l)
-        e = int.from_bytes(ep, "big")
+        e = random.randint(1, l**2)
 
     return e
 
 
 '''Random j'''
 def random_j(n):
-    j = random.randint(0, (n - 1) % n)
+    j = random.randint(1, n - 1)
     return j
+
+'''Random r'''
+def random_r(l):
+    """security parameter l'' = l^2"""
+    r = random.randint(1, l**2)
+    return r
 
 
 ''' CHF Public Key '''
@@ -57,4 +50,8 @@ def trapdoor(n, d):
     trap_d = n_factorization + str(d)
     return trap_d
 
-# TODO declare the actual Chameleon hash function
+def chameleon_hash_function(m, r, j, e, n):
+
+    h = ((j ** m) * (int(r) ** e) % n)
+
+    return h

@@ -78,4 +78,4 @@ def prime_generator(l):
 
     print("Secure Prime p = " + str(p))
     print("Secure Prime q = " + str(q) + "\n")
-    return p * q
+    return p, q
