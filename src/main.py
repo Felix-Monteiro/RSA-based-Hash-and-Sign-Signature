@@ -10,16 +10,19 @@ def setup():
     primes = PrimeNumberGenerator
     qr = QuadraticResidues
     hash_function = HashFunction
+
     print("\n=====================================================")
     print("Generating new Secure Primes...\n")
     # generates N
     n = primes.prime_generator(security_parameter_l)
     print("Product of the two primes is...\nN = " + str(n) + "\n")
+
     print("\n=====================================================")
     print("Calculating two random different Quadratic Residues...\n")
     lqr = qr.get_random_qr(qr.jacobi_legendre_qr(n))
     u = lqr[0]  # First QR
     h = lqr[1]  # Second QR
+
     print("\n=====================================================")
     print("Getting Parameters K and c from the Hash Function...\n")
     c = hash_function.generate_random_c(security_parameter_l)
