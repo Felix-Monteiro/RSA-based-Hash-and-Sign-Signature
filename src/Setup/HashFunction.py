@@ -24,23 +24,15 @@ def generate_random_key():
 ''''Random c'''
 
 def generate_random_c(l):
-    c = ""
-    encoding = 'utf8'
-    # Iterate over the range [0, l - 1]
-    for i in range(l):
-        # Generate the random number
-        num = random.randint(0, 1)
+    c = random.randint(0, l)
 
-        c += str(num)
-
-    return bytes(c, encoding)
+    return c
 
 
 ''''PRF Fk(x)'''
 
 def pseudo_random_function_f(k, x):
     encoding = 'utf8'
-
     signature = hmac.new(k, bytes(x), hashlib.sha256).hexdigest()
     sign_bytes = ''.join(format(ord(i), '08b') for i in signature)
 
@@ -49,12 +41,11 @@ def pseudo_random_function_f(k, x):
 ''' Hash Function Hk(x)'''
 
 def hash_function(c, f):
-    encoding = 'utf8'
+    mode = 'little'
+    h = c ^ int.from_bytes(f,mode)
 
-    h = int(c, 2) ^ int(f, 2)
-
-    return bytes('{0:b}'.format(h), encoding)
+    return h
 
 # TODO  check if prime latter in Sign()
-# c = hash_function(generate_random_c(6),pseudo_random_function_f(generate_random_key(),2))
-# print(int.from_bytes(c, 'little'))
+#c = hash_function(generate_random_c(6),pseudo_random_function_f(generate_random_key(),2))
+#print(c)

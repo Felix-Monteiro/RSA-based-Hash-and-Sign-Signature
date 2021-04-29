@@ -51,7 +51,6 @@ def trapdoor(n, d):
     return trap_d
 
 def chameleon_hash_function(m, r, j, e, n):
-
     h = ((j ** m) * (int(r) ** e) % n)
 
     return h
