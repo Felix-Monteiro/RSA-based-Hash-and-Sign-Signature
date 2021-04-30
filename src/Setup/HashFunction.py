@@ -8,7 +8,7 @@ import hashlib
 
 def generate_random_key():
     k = ""
-    sha256 = 256  # using SHA256 parameters
+    sha256 = 250  # using SHA256 parameters
     encoding = 'utf8'
 
     # Iterate over the range
@@ -18,16 +18,17 @@ def generate_random_key():
 
         k += str(num)
 
-    return bytes(k, encoding)
+    key_bytes = ''.join(format(ord(i), '08b') for i in k)
+    return bytes(key_bytes, encoding)
 
 
 ''''Random c'''
 
 def generate_random_c(l):
-    c = random.randint(0, l)
-
-    return c
-
+    encoding = 'utf8'
+    c = random.randint(0,l)
+    c_bytes = c.to_bytes(l, 'big')
+    return c_bytes
 
 ''''PRF Fk(x)'''
 
@@ -38,14 +39,14 @@ def pseudo_random_function_f(k, x):
 
     return bytes(sign_bytes, encoding)
 
+
 ''' Hash Function Hk(x)'''
 
 def hash_function(c, f):
     mode = 'little'
-    h = c ^ int.from_bytes(f,mode)
+    h = int.from_bytes(c, mode) ^ int.from_bytes(f, mode)
 
     return h
 
-# TODO  check if prime latter in Sign()
-#c = hash_function(generate_random_c(6),pseudo_random_function_f(generate_random_key(),2))
-#print(c)
+# TODO c is very small compared with f so the xor will not do much
+

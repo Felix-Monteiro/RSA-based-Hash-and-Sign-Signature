@@ -3,6 +3,7 @@ from Setup import QuadraticResidues
 from Setup import HashFunction
 from Setup import ChameleonHashFunction
 from Setup import KeysGeneration
+import sympy
 
 
 def setup(l):
@@ -35,12 +36,12 @@ def setup(l):
     c = hash_function.generate_random_c(l)
     k = hash_function.generate_random_key()
     print("Random Key K = " + str(k) + " random parameter c = " + str(c))
-    # TODO the L parameters must be checked with the Professor
+
     print("\n=====================================================")
     print("Publishing Parameter L from the Chameleon Hash Scheme...\n")
     e = str(chameleon_hash.random_e(l, p, q))
     j = str(chameleon_hash.random_j(n))
-    L = e + j  # random values used in CHF
+    L = str(n) + e + j  # random values used in CHF
 
     print("\n=====================================================")
     print("Building Public and Secret Keys...\n")
@@ -49,20 +50,51 @@ def setup(l):
     print("Public Key = " + pub_key + "\nSecret Key = " + str(sec_key))
     print("\n=====================================================")
 
-    return s, sec_key, pub_key
+    setup_parameters = s, sec_key, pub_key, j, e, n, c, k
+    return setup_parameters
 
 
-# def sign(sec_key, s, m):
+def sign(rtn, m, l):
+    s = rtn[0]
+
+    s += 1  # incrementing s counter
+    chameleon_hash = ChameleonHashFunction
+    hash_function = HashFunction
+
+    print("=> Starting Sign Algorithm!")
+
+    print("\n=====================================================")
+    print("Calculating random r based on the Chameleon Hash Function...\n")
+    r = chameleon_hash.random_r(l)
+    print("r =" + str(r))
+
+    print("\n=====================================================")
+    print("Calculating x = ChamHash(M,r)\n")
+    x = chameleon_hash.chameleon_hash_function(m, r, int(rtn[3]), int(rtn[4]), int(rtn[5]))
+    print("x =" + str(x))
+
+    print("\n=====================================================")
+    print("Getting a Prime Hk(s)...\n")
+    k = rtn[7]  # random key k
+    c = rtn[6]  # random c
+    # checking if e is prime
+    f = hash_function.pseudo_random_function_f(k, s)
+    e = hash_function.hash_function(rtn[6], f)
+    while not sympy.isprime(e):
+        s += 1
+        f = hash_function.pseudo_random_function_f(k, s)
+        e = hash_function.hash_function(c, f)
+        print("not prime" + str(e))
 
 
-# def verify(pk, m, o):
 
 
 if __name__ == '__main__':
     security_parameter_l = 10  # bit size
+    m = 2345
 
     print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
-    setup(security_parameter_l)
-    # sign()
+    rtn = setup(security_parameter_l)
+    sign(rtn, m, security_parameter_l)
     # verify()
     print("\n                                                 === End of Program ===")
