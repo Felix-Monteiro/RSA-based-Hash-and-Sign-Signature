@@ -17,13 +17,15 @@ def setup(l):
 
     print("=> Starting Setup Algorithm!")
 
-    print("\n=====================================================")
     print("Generating new Secure Primes...\n")
     # generates N
-    p = primes.prime_generator(l)[0]
-    q = primes.prime_generator(l)[1]
+    primes = primes.prime_generator(l)
+    p = primes[0]
+    q = primes[1]
     n = p * q
-    print("Product of the two primes is...\nN = " + str(n) + "\n")
+    n_bytes = ''.join(format(ord(i), '08b') for i in str(n))
+    encoding = 'utf8'
+    print("Product of the two primes is...\nN = " + str(bytes(n_bytes, encoding)) + "\n")
 
     print("\n=====================================================")
     print("Calculating two random different Quadratic Residues...\n")
@@ -34,14 +36,15 @@ def setup(l):
     print("\n=====================================================")
     print("Getting Parameters K and c from the Hash Function...\n")
     c = hash_function.generate_random_c(l)
-    k = hash_function.generate_random_key()
+    k = hash_function.generate_random_key(l)
     print("Random Key K = " + str(k) + " random parameter c = " + str(c))
 
     print("\n=====================================================")
-    print("Publishing Parameter L from the Chameleon Hash Scheme...\n")
+    print("Publishing Parameters L from the Chameleon Hash Scheme...\n")
     e = str(chameleon_hash.random_e(l, p, q))
     j = str(chameleon_hash.random_j(n))
     L = str(n) + e + j  # random values used in CHF
+    print("Parameters L:\ne = " + str(e) + " j = " + str(j) + " n = " + str(n))
 
     print("\n=====================================================")
     print("Building Public and Secret Keys...\n")
@@ -79,18 +82,22 @@ def sign(rtn, m, l):
     c = rtn[6]  # random c
     # checking if e is prime
     f = hash_function.pseudo_random_function_f(k, s)
-    e = hash_function.hash_function(rtn[6], f)
-    while not sympy.isprime(e):
-        s += 1
-        f = hash_function.pseudo_random_function_f(k, s)
-        e = hash_function.hash_function(c, f)
-        print("not prime" + str(e))
+    e = hash_function.hash_function(c, f)
+    while True:
+        if not sympy.isprime(e):
+            s += 1
+            f = hash_function.pseudo_random_function_f(k, s)
+            e = hash_function.hash_function(c, f)
+
+        elif sympy.isprime(e):
+            print(" prime" + str(e))
+            return False
 
 
 
 
 if __name__ == '__main__':
-    security_parameter_l = 10  # bit size
+    security_parameter_l = 1024  # bit size
     m = 2345
 
     print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")

@@ -14,7 +14,7 @@ first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 
 
 def random_prime_candidate(n):
-    return random.randrange(2 ** (n - 1) + 1, 2 ** n - 1)
+    return random.randrange(1,n)
 
 
 def coprime_checker(n):
