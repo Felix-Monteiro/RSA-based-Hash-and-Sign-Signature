@@ -1,5 +1,5 @@
-# Large Prime Generation for RSA Signature
 import random
+import Crypto.Util.number
 
 # Pre generated primes
 first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
@@ -12,10 +12,14 @@ first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
                      263, 269, 271, 277, 281, 283, 293,
                      307, 311, 313, 317, 331, 337, 347, 349]
 
-
+'''Manual Prime number generation'''
 def random_prime_candidate(n):
-    return random.randrange(1,n)
+    # (n-1) + (1 << (n-1)) -> precise bit size
+    return random.getrandbits(n)
 
+'''Automatic Prime number generation'''
+def random_prime_generator(n):
+    return Crypto.Util.number.getPrime(n, Crypto.Random.get_random_bytes)
 
 def coprime_checker(n):
     """ Generate a prime candidate divisible by first primes list"""
@@ -58,24 +62,40 @@ def miller_rabin_primality_test(mrc):
             return False
     return True
 
+def safe_prime_parameters_gen(l):
+    """Sophie Germain Primes"""
+
+    """Safe Prime P"""
+    p_candidate = random_prime_generator(l)
+    p = (2 * p_candidate) + 1
+    # blum integer test and rabin miller
+    while not miller_rabin_primality_test(p) or (p % 4) != 3:
+        p_candidate = random_prime_generator(l)
+        p = (2 * p_candidate) + 1
+
+    """Safe Prime q"""
+    q_candidate = random_prime_generator(l)
+    q = 2 * q_candidate + 1
+    # blum integer test and rabin miller
+    while not miller_rabin_primality_test(q) or (q % 4) != 3 or p == q:
+        q_candidate = random_prime_generator(l)
+        q = 2 * q_candidate + 1
+
+    return p, q
+
 
 def prime_generator(l):
-    p = coprime_checker(l)
-    q = coprime_checker(l)
-
-    # blum integer test and rabin miller
-    while (p % 4) != 3 or miller_rabin_primality_test(p) != True:
-        p = coprime_checker(l)
-
-    while (q % 4) != 3 or miller_rabin_primality_test(q) != True or q == p:
-        q = coprime_checker(l)
+    safe_primes = safe_prime_parameters_gen(l)
+    p = safe_primes[0]
+    q = safe_primes[1]
 
     phi_n = (p - 1) * (q - 1)
-    if 2 ** l < phi_n < 2 ** (l + 2):
-        print("Security Parameter l = " + str(l) + " and it is secure")
-    else:
-        print("Security Parameter l = " + str(l) + " and it is insecure")
 
-    print("Secure Prime p = " + str(p))
-    print("Secure Prime q = " + str(q) + "\n")
+    # TODO this verification is never secure, what is l ?
+    #  WIKI: the security parameter l  denotes the length in bits of the modulus n;
+    if (2 ** l) > phi_n or phi_n > (2 ** (l + 2)):
+        print("Prime is insecure")
+    else:
+        print("Prime is secure")
+
     return p, q

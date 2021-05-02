@@ -23,13 +23,13 @@ def setup(l):
     p = primes[0]
     q = primes[1]
     n = p * q
-    n_bytes = ''.join(format(ord(i), '08b') for i in str(n))
+    #n_bytes = ''.join(format(ord(i), '08b') for i in str(n))
     encoding = 'utf8'
-    print("Product of the two primes is...\nN = " + str(bytes(n_bytes, encoding)) + "\n")
+    print("Product of the two primes is...\nN = " + str(n) + "\n")
 
     print("\n=====================================================")
     print("Calculating two random different Quadratic Residues...\n")
-    lqr = qr.get_random_qr(qr.jacobi_legendre_qr(n))
+    lqr = qr.get_random_qr(n)
     u = lqr[0]  # First QR
     h = lqr[1]  # Second QR
 
@@ -97,7 +97,7 @@ def sign(rtn, m, l):
 
 
 if __name__ == '__main__':
-    security_parameter_l = 1024  # bit size
+    security_parameter_l = 8   # 512 gives 1024 n bit size
     m = 2345
 
     print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")

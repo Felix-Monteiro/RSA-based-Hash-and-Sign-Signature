@@ -12,7 +12,7 @@ def generate_random_key(l):
 
 '''Random c'''
 def generate_random_c(l):
-    c = random.randint(1, l)
+    c = random.getrandbits(l)
     return c
 
 ''''PRF Fk(x)'''
@@ -35,4 +35,3 @@ def hash_function(c, f):
     return h
 
 # TODO c is very small compared with f so the xor will not do much
-
