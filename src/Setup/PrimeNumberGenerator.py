@@ -92,7 +92,7 @@ def prime_generator(l):
     phi_n = (p - 1) * (q - 1)
 
     # TODO this verification is never secure, what is l ?
-    #  WIKI: the security parameter l  denotes the length in bits of the modulus n;
+    #  WIKI: the security parameter l denotes the length in bits of the modulus n;
     if (2 ** l) > phi_n or phi_n > (2 ** (l + 2)):
         print("Prime is insecure")
     else:
