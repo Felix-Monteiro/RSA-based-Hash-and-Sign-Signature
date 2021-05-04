@@ -21,6 +21,27 @@ def random_prime_candidate(n):
 def random_prime_generator(n):
     return Crypto.Util.number.getPrime(n, Crypto.Random.get_random_bytes)
 
+def is_prime(n):
+    """
+    Assumes that n is a positive natural number
+    """
+    # We know 1 is not a prime number
+    if n == 1:
+        return False
+
+    i = 2
+    # This will loop from 2 to int(sqrt(x))
+    while i*i <= n:
+        # Check if i divides x without leaving a remainder
+        if n % i == 0:
+            # This means that n has a factor in between 2 and sqrt(n)
+            # So it is not a prime number
+            return False
+        i += 1
+    # If we did not find any factor in the above loop,
+    # then n is a prime number
+    return True
+
 def coprime_checker(n):
     """ Generate a prime candidate divisible by first primes list"""
     while True:
@@ -84,18 +105,17 @@ def safe_prime_parameters_gen(l):
     return p, q
 
 
-def prime_generator(l):
-    safe_primes = safe_prime_parameters_gen(l)
+def prime_generator(lamda, l_parameter):
+    safe_primes = safe_prime_parameters_gen(lamda)
     p = safe_primes[0]
     q = safe_primes[1]
 
     phi_n = (p - 1) * (q - 1)
+    phi_n_bits = int.bit_length(phi_n)
 
-    # TODO this verification is never secure, what is l ?
-    #  WIKI: the security parameter l denotes the length in bits of the modulus n;
-    if (2 ** l) > phi_n or phi_n > (2 ** (l + 2)):
-        print("Prime is insecure")
+    if (int.bit_length(2 ** l_parameter)) < phi_n_bits < (int.bit_length(2 ** l_parameter)+2):
+        print("Prime security parameter is secure")
     else:
-        print("Prime is secure")
+        print("Prime security parameter is insecure")
 
     return p, q

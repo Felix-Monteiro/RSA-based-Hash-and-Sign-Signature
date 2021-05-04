@@ -4,13 +4,12 @@ import math
 '''Random e'''
 
 def random_e(l, p, q):
-    """security parameter l'' = l^2"""
-    e = random.getrandbits(l)
+    e = random.getrandbits(6)
     phi_n = (p - 1) * (q - 1)
 
     # check_relatively_primes_to_e
     while math.gcd(e, phi_n) != 1:
-        e = random.getrandbits(l)
+        e = random.getrandbits(6)
 
     return e
 
@@ -22,7 +21,6 @@ def random_j(n):
 
 '''Random r'''
 def random_r(l):
-    """security parameter l'' = (l*2)//3"""
     r = random.getrandbits(l)
     return r
 
