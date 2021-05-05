@@ -1,10 +1,11 @@
 import random
-import sympy
 from Setup import PrimeNumberGenerator
 from Setup import QuadraticResidues
 from Setup import HashFunction
 from Setup import ChameleonHashFunction
 from Setup import KeysGeneration
+from Sign import SignerComputation
+from Verify import VerificationAlgorithm
 
 
 def setup(l, l_p):
@@ -50,7 +51,7 @@ def setup(l, l_p):
     q_ch = primes_cha_hash[1]
     n_ch = p_ch * q_ch
 
-    e = chameleon_hash.random_e(security_param_l_p, p_ch, q_ch)
+    e = chameleon_hash.random_e(p_ch, q_ch)
     j = chameleon_hash.random_j(n_ch)
     L = str(n_ch) + str(e) + str(j)  # random values used in CHF
     print("Parameters L:\ne = " + str(e) + " j = " + str(j) + " n = " + str(n_ch) + " " + str(int.bit_length(n_ch)))
@@ -63,7 +64,7 @@ def setup(l, l_p):
     print("Public Key = " + pub_key + "\nSecret Key = " + str(sec_key))
     print("\n=====================================================")
 
-    setup_parameters = s, sec_key, pub_key, j, e, n_ch, c, k, n
+    setup_parameters = s, sec_key, pub_key, j, e, n_ch, c, k, n, u, h
     return setup_parameters
 
 
@@ -74,6 +75,7 @@ def sign(rtn, m, l_p):
     security_param_l_p = 2 * l_p
     chameleon_hash = ChameleonHashFunction
     hash_function = HashFunction
+    signer_computation = SignerComputation
     primes = PrimeNumberGenerator
 
     print("=> Starting Sign Algorithm!")
@@ -93,29 +95,42 @@ def sign(rtn, m, l_p):
     print("Getting a Prime Hk(s)...\n")
     k = rtn[7]  # random key k
     c = rtn[6]  # random c
-
     # checking if e is prime
-    f = hash_function.pseudo_random_function_f(k, s)
-    e = hash_function.hash_function(c, f)
-    while not primes.is_prime(e):
-        s += 1
-        f = hash_function.pseudo_random_function_f(k, s)
-        e = hash_function.hash_function(c, f)
-        print("not prime")
-    else:
-        print(" prime" + str(e))
-        return False
+    h_s = hash_function.hash_function(c, s, k)
+
+    print("\n=====================================================")
+    print("Computing B...\n")
+    u = rtn[9]
+    h = rtn[10]
+    n = rtn[8]
+    b = signer_computation.function_b(u, x, h, h_s[1], n)
+    print("B = " + str(b))
+
+    print("\n=====================================================")
+    print("Signing...\n")
+    es = h_s[0]
+    signature = signer_computation.signature(b, es, r, h_s[1])
+    print("Signature = " + str(signature))
+
+    print("\n=====================================================")
+    print("verification...\n")
+    verification = VerificationAlgorithm
+    o1= signature[0]
+    verification.verification(h_s[1],32,es,o1,x,n,u,h,primes.miller_rabin_primality_test(es))
 
 
-if __name__ == '__main__':
-    security_parameter_lambda = 511  # 512 gives 1024 n bit size - 511
+def main():
+    security_parameter_lambda = 16  # 512 gives 1024 n bit size - 511
     security_parameter_lambda_p = 4
-    security_parameter_lambda_p_p = 340  # 681 n bit cham_hash - 340 (2l/3)
-
-    m = random.getrandbits(security_parameter_lambda_p)
+    security_parameter_lambda_p_p = 11  # 681 n bit cham_hash - 340 (2l/3)
+    message = random.getrandbits(security_parameter_lambda_p)
 
     print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
     rtn = setup(security_parameter_lambda, security_parameter_lambda_p_p)
-    sign(rtn, m, security_parameter_lambda_p_p)
+    sign(rtn, message, security_parameter_lambda_p_p)
     # verify()
     print("\n                                                 === End of Program ===")
+
+
+if __name__ == '__main__':
+    main()
