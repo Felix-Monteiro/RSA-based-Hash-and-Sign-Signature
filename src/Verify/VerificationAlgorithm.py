@@ -1,18 +1,18 @@
 import math
 
 
-def verification(i, lamda, es, o1, x, n, u, h, test):
-    if not 0 < i < (2 ** lamda):
-        print("rejected1")
-        return
-    if not test:
-        print("rejected2")
-        return
-    y = o1 ** (2 * (math.ceil(math.log(i))))
+def verification(i, l, es, o1, x, n, u, h, primality_test):
+    #TODO Need to compute again values
+    times_s = (2 * (math.ceil(math.log(i))))
+    y = o1 ** times_s
 
-    if (y ** es) % n == ((u ** x) * h) % n:
-        print("verified")
+    if not 0 < i < (2 ** l):
+        print("ERROR: Rejected because i not correct")
+    elif not primality_test:
+        print("ERROR: Rejected because Hk(i) not a prime")
+    elif (y ** es) % n == ((u ** x) * h) % n:
+        print("Signature Verified!")
     else:
-        print("reject3")
+        print("ERROR: Rejected equality in mod N failed")
 
     return

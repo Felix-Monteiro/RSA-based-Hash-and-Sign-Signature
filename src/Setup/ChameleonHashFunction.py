@@ -1,13 +1,12 @@
 import random
 import math
 
+'''Construction of a separate Chameleon Hash Function based on RSA'''
+
 '''Random e'''
-
-
 def random_e(p, q):
     phi_n = (p - 1) * (q - 1)
     lcm = phi_n // math.gcd(p - 1, q - 1)
-    #l = math.lcm(p - 1, q - 1) # check latter
     e = random.randint(2, lcm)
 
     # check_relatively_primes_to_e
@@ -18,7 +17,6 @@ def random_e(p, q):
 
 
 '''Random j'''
-
 
 def random_j(n):
     j = random.randint(1, n - 1)

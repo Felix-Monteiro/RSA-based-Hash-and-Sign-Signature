@@ -2,6 +2,7 @@ import math
 import random
 import libnum
 
+'''Jacobi Calculation may provide non quadratic values - NOT USED'''
 def jacobi_legendre_qr(n):
     a = random.randint(1, math.floor(n // 2))
     while True:
@@ -11,21 +12,20 @@ def jacobi_legendre_qr(n):
         else:
             a -= 1
 
-
 """ Picks two random QR from the list of QRs of N """
-
 def get_random_qr(n):
     u = random.randint(1, n-1)
     h = random.randint(1, n-1)
 
-    qr_u = (u**2) % n
-    qr_h = (h**2) % n
+    qr_u = (u ** 2) % n
+    qr_h = (h ** 2) % n
+
     while u == h:
         u = random.randint(1, n-1)
         h = random.randint(1, n-1)
 
         qr_u = (u ** 2) % n
         qr_h = (h ** 2) % n
-
     print("[QR 1] u = " + str(qr_u) + "\n" + "[QR 2] h = " + str(qr_h))
+
     return qr_u, qr_h

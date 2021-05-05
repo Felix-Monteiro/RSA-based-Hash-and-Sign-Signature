@@ -1,22 +1,23 @@
 import math
 import random
 
+'''Concatenation of values that compose the Public Key'''
 def public_key(n, u, h, c, k, L):
     pub_key = str(n) + str(u) + str(h) + str(c) + str(int.from_bytes(k, 'little')) + str(L)
 
     return pub_key
 
-def random_e(l, p, q):
-    """security parameter l"""
-    e = random.getrandbits(l)
+def random_e(p, q):
     phi_n = (p - 1) * (q - 1)
+    lcm = phi_n // math.gcd(p - 1, q - 1)
+    e = random.randint(2, lcm)
 
     # check_relatively_primes_to_e
-    while math.gcd(e, phi_n) != 1:
-        e = random.getrandbits(l)
-
+    while math.gcd(e, phi_n) != 1 or math.gcd(e, lcm) != 1:
+        e = random.randint(2, lcm)
     return e
 
+'''Extended Euclidean Algorithm used to find the inverse of e'''
 def extended_gcd(a, b):
     if a == 0:
         return b, 0, 1

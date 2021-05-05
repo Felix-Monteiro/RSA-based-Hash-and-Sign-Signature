@@ -21,19 +21,7 @@ def random_prime_candidate(n):
 def random_prime_generator(n):
     return Crypto.Util.number.getPrime(n, Crypto.Random.get_random_bytes)
 
-def primeCheck(n):
-    # 0, 1, even numbers greater than 2 are NOT PRIME
-    if n==1 or n==0 or (n % 2 == 0 and n > 2):
-        return "Not prime"
-    else:
-        # Not prime if divisible by another number less
-        # or equal to the square root of itself.
-        # n**(1/2) returns square root of n
-        for i in range(3, int(n**(1/2))+1, 2):
-            if n%i == 0:
-                return "Not prime"
-        return "Prime"
-
+'''Co-Prime test'''
 def coprime_checker(n):
     """ Generate a prime candidate divisible by first primes list"""
     while True:
@@ -46,9 +34,10 @@ def coprime_checker(n):
             if pc % divisor == 0 and divisor ** 2 <= pc:
                 break
         else:
+
             return pc
 
-
+'''Primality Test'''
 def miller_rabin_primality_test(mrc):
     max_divisions_by_two = 0
     ec = mrc - 1
@@ -73,8 +62,10 @@ def miller_rabin_primality_test(mrc):
         round_tester = random.randrange(2, mrc)
         if trial_composite(round_tester):
             return False
+
     return True
 
+'''Safe Prime Generation'''
 def safe_prime_parameters_gen(l):
     """Sophie Germain Primes"""
 
@@ -96,7 +87,7 @@ def safe_prime_parameters_gen(l):
 
     return p, q
 
-
+'''Generates p and q'''
 def prime_generator(lamda, l_parameter):
     safe_primes = safe_prime_parameters_gen(lamda)
     p = safe_primes[0]
