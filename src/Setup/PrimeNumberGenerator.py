@@ -1,5 +1,5 @@
-# Large Prime Generation for RSA Signature
 import random
+import Crypto.Util.number
 
 # Pre generated primes
 first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
@@ -12,11 +12,16 @@ first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
                      263, 269, 271, 277, 281, 283, 293,
                      307, 311, 313, 317, 331, 337, 347, 349]
 
-
+'''Manual Prime number generation'''
 def random_prime_candidate(n):
-    return random.randrange(1,n)
+    # (n-1) + (1 << (n-1)) -> precise bit size
+    return random.getrandbits(n)
 
+'''Automatic Prime number generation'''
+def random_prime_generator(n):
+    return Crypto.Util.number.getPrime(n, Crypto.Random.get_random_bytes)
 
+'''Co-Prime test'''
 def coprime_checker(n):
     """ Generate a prime candidate divisible by first primes list"""
     while True:
@@ -29,9 +34,10 @@ def coprime_checker(n):
             if pc % divisor == 0 and divisor ** 2 <= pc:
                 break
         else:
+
             return pc
 
-
+'''Primality Test'''
 def miller_rabin_primality_test(mrc):
     max_divisions_by_two = 0
     ec = mrc - 1
@@ -56,26 +62,43 @@ def miller_rabin_primality_test(mrc):
         round_tester = random.randrange(2, mrc)
         if trial_composite(round_tester):
             return False
+
     return True
 
+'''Safe Prime Generation'''
+def safe_prime_parameters_gen(l):
+    """Sophie Germain Primes"""
 
-def prime_generator(l):
-    p = coprime_checker(l)
-    q = coprime_checker(l)
-
+    """Safe Prime P"""
+    p_candidate = random_prime_generator(l)
+    p = (2 * p_candidate) + 1
     # blum integer test and rabin miller
-    while (p % 4) != 3 or miller_rabin_primality_test(p) != True:
-        p = coprime_checker(l)
+    while not miller_rabin_primality_test(p) or (p % 4) != 3:
+        p_candidate = random_prime_generator(l)
+        p = (2 * p_candidate) + 1
 
-    while (q % 4) != 3 or miller_rabin_primality_test(q) != True or q == p:
-        q = coprime_checker(l)
+    """Safe Prime q"""
+    q_candidate = random_prime_generator(l)
+    q = 2 * q_candidate + 1
+    # blum integer test and rabin miller
+    while not miller_rabin_primality_test(q) or (q % 4) != 3 or p == q:
+        q_candidate = random_prime_generator(l)
+        q = 2 * q_candidate + 1
+
+    return p, q
+
+'''Generates p and q'''
+def prime_generator(lamda, l_parameter):
+    safe_primes = safe_prime_parameters_gen(lamda)
+    p = safe_primes[0]
+    q = safe_primes[1]
 
     phi_n = (p - 1) * (q - 1)
-    if 2 ** l < phi_n < 2 ** (l + 2):
-        print("Security Parameter l = " + str(l) + " and it is secure")
-    else:
-        print("Security Parameter l = " + str(l) + " and it is insecure")
+    phi_n_bits = int.bit_length(phi_n)
 
-    print("Secure Prime p = " + str(p))
-    print("Secure Prime q = " + str(q) + "\n")
+    if (int.bit_length(2 ** l_parameter)) < phi_n_bits < (int.bit_length(2 ** l_parameter)+2):
+        print("Prime security parameter is secure")
+    else:
+        print("Prime security parameter is insecure")
+
     return p, q
