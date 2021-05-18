@@ -28,7 +28,7 @@ def pseudo_random_function_f(k, x):
     ct_bytes = cipher.encrypt(pad(x, AES.block_size))
 
     # transforming f into binary
-    ct_bytes = bin(int.from_bytes(ct_bytes, 'little'))[124:]  # reducing bit size of f
+    ct_bytes = bin(int.from_bytes(ct_bytes, 'little'))[126:]  # reducing bit size of f
     ct_bytes = bytes(ct_bytes, 'utf-8')
 
     # transforming f into int
@@ -41,16 +41,15 @@ def pseudo_random_function_f(k, x):
 def hash_function(c, s, k):
     f = pseudo_random_function_f(k, s)
     h = c ^ f
-
     # checking if e is prime
     while not miller_rabin_primality_test(h):
-        print("not prime")
+        print("Not prime")
         s += 1
         f = pseudo_random_function_f(k, s)
         h = c ^ f
     else:
         h_bits = int.bit_length(h)
         f_bits = int.bit_length(f)
-        print("Prime Hk(s) = " + str(h) + str(h_bits) + str(f_bits))
+        print("Prime Hk(s) = " + str(h) + " h_bits = " + str(h_bits) + " f_bits = " + str(f_bits))
 
         return h, s

@@ -19,7 +19,8 @@ def random_e(p, q):
 '''Random j'''
 
 def random_j(n):
-    j = random.randint(1, n - 1)
+    # sizes are adjusted for performance
+    j = random.randint(1, 8)  # (n-1) -> theoretical range
     return j
 
 
@@ -27,7 +28,7 @@ def random_j(n):
 
 
 def random_r(l):
-    r = random.getrandbits(l)
+    r = random.randrange(1, 8)  # (l) -> theoretical range
     return r
 
 
