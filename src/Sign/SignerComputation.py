@@ -1,10 +1,9 @@
 import math
 
 def function_b(u, x, h, s, n):
-    # TODO Values need to be small
     s = math.ceil(math.log(s, 2))
-    e = (1 / 2) ** s
-    b = (((u ** x) * h) ** e) % n
+    b = (((u ** x) * h) ** (1 / 2) ** s) % n
+
     return b
 
 

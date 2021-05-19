@@ -15,7 +15,8 @@ first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 '''Manual Prime number generation'''
 def random_prime_candidate(n):
     # (n-1) + (1 << (n-1)) -> precise bit size
-    return random.getrandbits(n)
+    # choosing the secure primes for performance reasons
+    return random.randint(5, 11)
 
 '''Automatic Prime number generation'''
 def random_prime_generator(n):
@@ -70,19 +71,19 @@ def safe_prime_parameters_gen(l):
     """Sophie Germain Primes"""
 
     """Safe Prime P"""
-    p_candidate = random_prime_generator(l)
+    p_candidate = coprime_checker(l)
     p = (2 * p_candidate) + 1
     # blum integer test and rabin miller
     while not miller_rabin_primality_test(p) or (p % 4) != 3:
-        p_candidate = random_prime_generator(l)
+        p_candidate = coprime_checker(l)
         p = (2 * p_candidate) + 1
 
     """Safe Prime q"""
-    q_candidate = random_prime_generator(l)
+    q_candidate = coprime_checker(l)
     q = 2 * q_candidate + 1
     # blum integer test and rabin miller
     while not miller_rabin_primality_test(q) or (q % 4) != 3 or p == q:
-        q_candidate = random_prime_generator(l)
+        q_candidate = coprime_checker(l)
         q = 2 * q_candidate + 1
 
     return p, q

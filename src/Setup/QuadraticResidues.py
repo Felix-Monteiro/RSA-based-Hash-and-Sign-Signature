@@ -15,8 +15,9 @@ def jacobi_legendre_qr(n):
 """ Picks two random QR from the list of QRs of N """
 def get_random_qr(n):
     # sizes are adjusted for performance
-    u = random.randint(1, 16)  # (n-1) -> theoretical range
-    h = random.randint(1, 16)
+    # (n-1) -> theoretical range
+    u = random.randint(2, 10)
+    h = random.randint(2, 10)
 
     qr_u = (u ** 2) % n
     qr_h = (h ** 2) % n

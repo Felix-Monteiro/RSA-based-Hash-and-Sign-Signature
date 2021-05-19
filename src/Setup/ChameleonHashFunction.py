@@ -12,37 +12,35 @@ def random_e(p, q):
     # check_relatively_primes_to_e
     while math.gcd(e, phi_n) != 1 or math.gcd(e, lcm) != 1:
         e = random.randint(2, lcm)
+
+    # e is being chosen for performance
     e = 3
     return e
 
 
 '''Random j'''
-
 def random_j(n):
     # sizes are adjusted for performance
-    j = random.randint(1, 8)  # (n-1) -> theoretical range
+    # (n-1) -> theoretical range
+    j = random.randint(1, 10)
     return j
 
 
 '''Random r'''
-
-
 def random_r(l):
-    r = random.randrange(1, 8)  # (l) -> theoretical range
+    # sizes are adjusted for performance
+    # (l) -> theoretical range
+    r = random.randrange(1, 10)
     return r
 
 
 ''' CHF Public Key '''
-
-
 def public_key(n, e, j):
     pub_key = str(n) + str(e) + str(j)
     return pub_key
 
 
 '''Function Trapdoor'''
-
-
 def extended_gcd(a, b):
     if a == 0:
         return b, 0, 1

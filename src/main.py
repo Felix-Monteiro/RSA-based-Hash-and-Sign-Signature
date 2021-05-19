@@ -93,7 +93,6 @@ def sign(rtn, m, l, l_p):
     j = int(rtn[3])
     e = int(rtn[4])
     n_ch = int(rtn[5])
-    # TODO X IS TOO LARGE
     x = chameleon_hash.chameleon_hash_function(m, r, j, e, n_ch)
     x_bits = int.bit_length(x)
     print("x =" + str(x) + ", bit_size = " + str(x_bits))
@@ -118,8 +117,8 @@ def sign(rtn, m, l, l_p):
     print("Signing...\n")
     es = hash_k_of_s[0]
     signature = signer_computation.signature(b, es, r, s)
-    o1 = int(signature[0])
-    m_signed = int(str(o1) + str(signature[1]) + str(signature[2]))
+    o1 = signature[0]
+    m_signed = "(" + str(o1) + ", " + str(signature[1]) + ", " + str(signature[2]) + ")"
     print("Signature = " + str(m_signed))
 
     print("\n=====================================================")
