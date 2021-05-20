@@ -9,7 +9,6 @@ from Sign import SignerComputation
 from Verify import VerificationAlgorithm
 
 
-
 def setup(l, l_p_p):
     primes = PrimeNumberGenerator
     qr = QuadraticResidues
@@ -128,7 +127,9 @@ def sign(rtn, m, l, l_p):
     print("\n=====================================================")
     print("Verification...\n")
     vrf = verification.verification(s, l, es, o1, x, n, u, h, primes.miller_rabin_primality_test(es))
+    print("=====================================================")
     return vrf
+
 
 def success_rate():
     security_parameter_lambda = 15  # 512 gives 1024 n bit size - 511 15
@@ -152,6 +153,7 @@ def success_rate():
     print("Validated :" + str(validated))
     print("Failed :" + str(failed))
 
+
 def main():
     security_parameter_lambda = 15  # 512 gives 1024 n bit size - 511 15
     security_parameter_lambda_p = 2
@@ -160,14 +162,13 @@ def main():
     print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
     rtn = setup(security_parameter_lambda, security_parameter_lambda_p_p)
     sin = sign(rtn, message, security_parameter_lambda, security_parameter_lambda_p_p)
-    print("\n                                                 === End of Program ===")
 
     while not sin:
-        print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
         rtn = setup(security_parameter_lambda, security_parameter_lambda_p_p)
         sin = sign(rtn, message, security_parameter_lambda, security_parameter_lambda_p_p)
         # verify()
-        print("\n                                                 === End of Program ===")
+
+    print("\n                                                 === End of Program ===")
 
 
 if __name__ == '__main__':

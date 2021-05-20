@@ -19,5 +19,6 @@ def verification(i, l, es, o1, x, n, u, h, primality_test):
         print("Signature Verified!")
         return True
     else:
-        print("ERROR: Rejected equality in mod N failed")
+        print("Signature Failed: Rejected equality in mod N failed\n" + "\nStaring new Parameters to retry Signing "
+                                                                        "message...\n")
         return False
