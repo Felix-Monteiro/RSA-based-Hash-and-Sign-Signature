@@ -17,6 +17,7 @@ def verification(i, l, es, o1, x, n, u, h, primality_test):
         print("ERROR: Rejected because Hk(i) not a prime")
     elif y_es == u_x:
         print("Signature Verified!")
+        return True
     else:
         print("ERROR: Rejected equality in mod N failed")
-    return
+        return False

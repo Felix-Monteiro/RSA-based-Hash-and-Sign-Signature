@@ -1,5 +1,6 @@
 import math
 
+
 def function_b(u, x, h, s, n):
     s = math.ceil(math.log(s, 2))
     b = (((u ** x) * h) ** (1 / 2) ** s) % n
