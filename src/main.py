@@ -5,7 +5,7 @@ from Setup import QuadraticResidues
 from Setup import HashFunction
 from Setup import ChameleonHashFunction
 from Setup import KeysGeneration
-from Sign import SignerComputation
+from Sign import SigningAlgorithm
 from Verify import VerificationAlgorithm
 
 
@@ -73,7 +73,7 @@ def setup(l, l_p_p):
 def sign(rtn, m, l, l_p):
     chameleon_hash = ChameleonHashFunction
     hash_function = HashFunction
-    signer_computation = SignerComputation
+    signer_computation = SigningAlgorithm
     primes = PrimeNumberGenerator
     verification = VerificationAlgorithm
 
@@ -131,11 +131,16 @@ def sign(rtn, m, l, l_p):
     return vrf
 
 
-def success_rate():
-    security_parameter_lambda = 15  # 512 gives 1024 n bit size - 511 15
-    security_parameter_lambda_p = 2
-    security_parameter_lambda_p_p = 9  # 681 n bit cham_hash - 340 (2l/3) 9
+def signature_success_rate():
+    # 512 gives 1024 n bit size - 511
+    security_parameter_lambda = 511
+    # message bit size
+    security_parameter_lambda_p = 4
+    # 681 n bit cham_hash - 340 (2l/3)
+    security_parameter_lambda_p_p = 340
+
     message = random.getrandbits(security_parameter_lambda_p)
+
     validated = 0
     failed = 0
     for x in range(100):
@@ -155,18 +160,23 @@ def success_rate():
 
 
 def main():
-    security_parameter_lambda = 15  # 512 gives 1024 n bit size - 511 15
-    security_parameter_lambda_p = 2
-    security_parameter_lambda_p_p = 9  # 681 n bit cham_hash - 340 (2l/3) 9
-    message = random.getrandbits(security_parameter_lambda_p)
-    print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
-    rtn = setup(security_parameter_lambda, security_parameter_lambda_p_p)
-    sin = sign(rtn, message, security_parameter_lambda, security_parameter_lambda_p_p)
+    """Security Parameters"""
+    # 512 gives 1024 n bit size - 511
+    security_parameter_lambda = 511
+    # message bit size
+    security_parameter_lambda_p = 4
+    # 681 n bit cham_hash - 340 (2l/3)
+    security_parameter_lambda_p_p = 340
 
-    while not sin:
-        rtn = setup(security_parameter_lambda, security_parameter_lambda_p_p)
-        sin = sign(rtn, message, security_parameter_lambda, security_parameter_lambda_p_p)
-        # verify()
+    message = random.getrandbits(security_parameter_lambda_p)
+
+    print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
+    initial_setup = setup(security_parameter_lambda, security_parameter_lambda_p_p)
+    signature = sign(initial_setup, message, security_parameter_lambda, security_parameter_lambda_p_p)
+
+    while not signature:
+        initial_setup = setup(security_parameter_lambda, security_parameter_lambda_p_p)
+        signature = sign(initial_setup, message, security_parameter_lambda, security_parameter_lambda_p_p)
 
     print("\n                                                 === End of Program ===")
 
