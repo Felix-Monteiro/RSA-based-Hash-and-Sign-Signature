@@ -12,11 +12,11 @@ def verification(i, l, es, o1, x, n, u, h, primality_test):
 
     ''' Verification Tests '''
     if not i > 0 and i < (2 ** l):
-        print("ERROR: Rejected because i not correct")
+        print("\nERROR: Rejected because i not correct")
     elif not primality_test:
-        print("ERROR: Rejected because Hk(i) not a prime")
+        print("\nERROR: Rejected because Hk(i) not a prime")
     elif y_es == u_x:
-        print("Signature Verified!")
+        print("\nSignature Verified!")
         return True
     else:
         print("Signature Failed: Rejected equality in mod N failed\n" + "\nStaring new Parameters to retry Signing "

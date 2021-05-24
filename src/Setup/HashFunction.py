@@ -15,7 +15,9 @@ def generate_random_key():
 
 '''Random c'''
 def generate_random_c(l):
-    c = random.getrandbits(4)  # (l)
+    # sizes are adjusted for performance
+    # (l) -> theoretical range
+    c = random.getrandbits(4)
     return c
 
 ''''PRF Fk(x)'''
@@ -35,7 +37,7 @@ def pseudo_random_function_f(k, x):
     # transforming f into int
     ct_int = int.from_bytes(ct_bytes, 'little')
 
-    # reducing bit size of f
+    # reducing bit size of f for performance reasons
     ct_final = int(str(ct_int)[:3])
     return ct_final
 
@@ -52,8 +54,9 @@ def hash_function(c, s, k):
         f = pseudo_random_function_f(k, s)
         h = c ^ f
     else:
+        # values used to double-check bit size of f and h
         h_bits = int.bit_length(h)
         f_bits = int.bit_length(f)
-        print("Prime Hk(s) = " + str(h) + " h_bits = " + str(h_bits) + " f_bits = " + str(f_bits))
+        print("Prime Hk(s) = " + str(h))
 
         return h, s

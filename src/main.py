@@ -17,7 +17,7 @@ def setup(l, l_p_p):
     keys_generator = KeysGeneration
 
     s = 0  # state counter
-    """These two security values are merely used for security checks"""
+    """These two security values are merely used for theoretical security checks"""
     security_param_l = 2 * l
     security_param_l_p_p = 2 * l_p_p
 
@@ -29,7 +29,7 @@ def setup(l, l_p_p):
     primes_rsa = primes.prime_generator(l, security_param_l)
     p = primes_rsa[0]
     q = primes_rsa[1]
-    print("p = " + str(p) + "\n")
+    print("p = " + str(p))
     print("q = " + str(q) + "\n")
     n = p * q
     print("Product of the two primes is...\nN = " + str(n) + "\n")
@@ -56,7 +56,7 @@ def setup(l, l_p_p):
     e = chameleon_hash.random_e(p_ch, q_ch)
     j = chameleon_hash.random_j(n_ch)
     L = str(n_ch) + str(e) + str(j)  # random values used in CHF
-    print("Parameters L:\ne = " + str(e) + " j = " + str(j) + " n = " + str(n_ch) + " " + str(int.bit_length(n_ch)))
+    print("Parameters L:\ne = " + str(e) + ", j = " + str(j) + ", n = " + str(n_ch))
 
     print("\n=====================================================")
     print("Building Public and Secret Keys...\n")
@@ -66,6 +66,7 @@ def setup(l, l_p_p):
     print("Public Key = " + pub_key + "\nSecret Key = " + str(sec_key))
     print("\n=====================================================")
 
+    # sending the required parameters for the sign algorithm
     setup_parameters = s, sec_key, pub_key, j, e, n_ch, c, k, n, u, h
     return setup_parameters
 
@@ -78,12 +79,12 @@ def sign(rtn, m, l, l_p):
     verification = VerificationAlgorithm
 
     s = rtn[0]
-    s += 1  # incrementing s counter
+    s += 1  # incrementing the s counter
 
     security_param_l_p = 2 * l_p
 
     print("=> Starting Sign Algorithm!")
-
+    print("Incrementing the s counter!")
     print("\n=====================================================")
     print("Calculating random r based on the Chameleon Hash Function...\n")
     r = chameleon_hash.random_r(security_param_l_p)
@@ -98,7 +99,7 @@ def sign(rtn, m, l, l_p):
     # x is being adjusted for performance
     x_final = int(str(x)[:2])
     x_bits = int.bit_length(x)
-    print("x =" + str(x) + ", bit_size = " + str(x_bits))
+    print("x =" + str(x))
 
     print("\n=====================================================")
     print("Getting a Prime Hk(s)...\n")
