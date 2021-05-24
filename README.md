@@ -42,13 +42,13 @@ In order to run the Project one must have installed the following requirements:
 * pycryptodome
 * libnum
     
+Commands:
 
-    Commands:
-        * sudo apt install python3.8
-        * sudo apt install python3-pip
-        * pip install pycryptodome
-        * pip install libnum
-          (these commands were used for an ubuntu enviorment)
+    * sudo apt install python3.8
+    * sudo apt install python3-pip
+    * pip install pycryptodome
+    * pip install libnum
+(these commands were used for an ubuntu enviorment)
 
 Run Command: 
 * ```python3 main.py ```
