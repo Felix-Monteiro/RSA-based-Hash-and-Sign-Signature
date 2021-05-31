@@ -7,14 +7,18 @@ def public_key(n, u, h, c, k, L):
 
     return pub_key
 
-def random_e(p, q):
+'''Random e'''
+def random_e(p, q, l):
+    # Carmichael's totient function
+    # lcm = phi_n // math.gcd(p - 1, q - 1)
+    e = random.getrandbits(l)
     phi_n = (p - 1) * (q - 1)
-    lcm = phi_n // math.gcd(p - 1, q - 1)
-    e = random.randint(2, lcm)
 
     # check_relatively_primes_to_e
-    while math.gcd(e, phi_n) != 1 or math.gcd(e, lcm) != 1:
-        e = random.randint(2, lcm)
+    # plus math.gcd(e, lcm) != 1 if using Carmichael's totient function
+    while math.gcd(e, phi_n) != 1:
+        e = random.getrandbits(l)
+
     return e
 
 '''Extended Euclidean Algorithm used to find the inverse of e'''

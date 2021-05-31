@@ -53,7 +53,7 @@ def setup(l, l_p_p):
     q_ch = primes_cha_hash[1]
     n_ch = p_ch * q_ch
 
-    e = chameleon_hash.random_e(p_ch, q_ch)
+    e = chameleon_hash.random_e(p_ch, q_ch, l_p_p)
     j = chameleon_hash.random_j(n_ch)
     L = str(n_ch) + str(e) + str(j)  # random values used in CHF
     print("Parameters L:\ne = " + str(e) + ", j = " + str(j) + ", n = " + str(n_ch))
@@ -61,7 +61,7 @@ def setup(l, l_p_p):
     print("\n=====================================================")
     print("Building Public and Secret Keys...\n")
     pub_key = keys_generator.public_key(n, u, h, c, k, L)
-    e_sec = keys_generator.random_e(p, q)
+    e_sec = keys_generator.random_e(p, q, l)
     sec_key = keys_generator.secret_key(p, q, e_sec)
     print("Public Key = " + pub_key + "\nSecret Key = " + str(sec_key))
     print("\n=====================================================")
@@ -148,14 +148,12 @@ def signature_success_rate():
         print("\n                             === Hash-and-Sign Signature under the RSA Standard Assumptions ===\n")
         rtn = setup(security_parameter_lambda, security_parameter_lambda_p_p)
         sin = sign(rtn, message, security_parameter_lambda, security_parameter_lambda_p_p)
-        # verify()
         print("\n                                                 === End of Program ===")
         if sin:
             validated += 1
         else:
             failed += 1
 
-    os.system('clear')
     print("Validated :" + str(validated))
     print("Failed :" + str(failed))
 
@@ -180,7 +178,6 @@ def main():
         signature = sign(initial_setup, message, security_parameter_lambda, security_parameter_lambda_p_p)
 
     print("\n                                                 === End of Program ===")
-
 
 if __name__ == '__main__':
     main()
