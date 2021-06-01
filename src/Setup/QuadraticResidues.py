@@ -16,18 +16,18 @@ def jacobi_legendre_qr(n):
 def get_random_qr(n):
     # sizes are adjusted for performance
     # (n-1) -> theoretical range
-    u = random.randint(2, 10)
-    h = random.randint(2, 10)
+    u = random.randint(2, (n-1)/2)
+    h = random.randint(2, (n-1)/2)
 
-    qr_u = (u ** 2) % n
-    qr_h = (h ** 2) % n
+    qr_u = pow(u, 2, n)
+    qr_h = pow(h, 2, n)
 
     while u == h:
-        u = random.randint(1, 16)
-        h = random.randint(1, 16)
+        u = random.randint(2, (n - 1) / 2)
+        h = random.randint(2, (n - 1) / 2)
 
-        qr_u = (u ** 2) % n
-        qr_h = (h ** 2) % n
+        qr_u = pow(u, 2, n)
+        qr_h = pow(h, 2, n)
     print("[QR 1] u = " + str(qr_u) + "\n" + "[QR 2] h = " + str(qr_h))
 
     return qr_u, qr_h

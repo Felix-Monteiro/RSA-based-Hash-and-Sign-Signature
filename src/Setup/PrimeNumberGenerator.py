@@ -15,8 +15,9 @@ first_primes_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
 '''Manual Prime number generation'''
 def random_prime_candidate(n):
     # (n-1) + (1 << (n-1)) -> precise bit size
+    #return random.getrandbits(n-1)
     # choosing the secure primes for performance reasons
-    return random.randint(5, 11)
+    return random.randint(5, n)
 
 '''Automatic Prime number generation'''
 def random_prime_generator(n):
@@ -97,7 +98,7 @@ def prime_generator(lamda, l_parameter):
     phi_n = (p - 1) * (q - 1)
     phi_n_bits = int.bit_length(phi_n)
 
-    if (int.bit_length(2 ** l_parameter)) < phi_n_bits < (int.bit_length(2 ** l_parameter)+2):
+    if (int.bit_length(2 ** l_parameter)) < phi_n_bits < (int.bit_length(2 ** (l_parameter+2))):
         print("Prime security parameter is secure")
     else:
         print("Prime security parameter is insecure")

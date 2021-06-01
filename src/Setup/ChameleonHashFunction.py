@@ -15,24 +15,18 @@ def random_e(p, q, l):
     while math.gcd(e, phi_n) != 1:
         e = random.getrandbits(l)
 
-    # e is being chosen for performance
-    e = 3
     return e
 
 
 '''Random j'''
 def random_j(n):
-    # sizes are adjusted for performance
-    # (n-1) -> theoretical range
-    j = random.randint(1, 10)
+    j = random.randint(1, n)
     return j
 
 
 '''Random r'''
 def random_r(l):
-    # sizes are adjusted for performance
-    # (l) -> theoretical range
-    r = random.randrange(1, 10)
+    r = random.getrandbits(l)
     return r
 
 
@@ -67,6 +61,8 @@ def value_d(p, q, e):
 
 
 def chameleon_hash_function(m, r, j, e, n):
-    ch = ((j ** m) * (r ** e)) % n
+    a = pow(j, m, n)
+    b = pow(r, e, n)
+    ch = (a * b) % n
 
     return ch

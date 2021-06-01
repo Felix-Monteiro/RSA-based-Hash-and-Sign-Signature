@@ -97,7 +97,7 @@ def sign(rtn, m, l, l_p):
     n_ch = int(rtn[5])
     x = chameleon_hash.chameleon_hash_function(m, r, j, e, n_ch)
     # x is being adjusted for performance
-    x_final = int(str(x)[:2])
+    x_final = int(str(x)[:4])
     x_bits = int.bit_length(x)
     print("x =" + str(x))
 

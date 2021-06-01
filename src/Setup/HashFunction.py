@@ -15,7 +15,7 @@ def generate_random_key():
 
 '''Random c'''
 def generate_random_c(l):
-    # sizes are adjusted for performance
+    # size is adjusted for performance
     # (l) -> theoretical range
     c = random.getrandbits(4)
     return c
@@ -38,7 +38,7 @@ def pseudo_random_function_f(k, x):
     ct_int = int.from_bytes(ct_bytes, 'little')
 
     # reducing bit size of f for performance reasons
-    ct_final = int(str(ct_int)[:3])
+    ct_final = int(str(ct_int)[:5])
     return ct_final
 
 ''' Hash Function Hk(x)'''
