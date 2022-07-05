@@ -1,4 +1,4 @@
-# Cryptography and Security Protocols Project
+# RSA-based Hash-and-Sign Signature
 Our Project has the objective of applying the RSA-based construction of the Hash-and-Sign Signature presented in the paper ```Realizing Hash-and-Sign Signatures under Standard Assumptions```. See Paper [here](docs/2009-028.pdf)
 ## Project Overview
 In our RSA Signature realization there are three main stages:
